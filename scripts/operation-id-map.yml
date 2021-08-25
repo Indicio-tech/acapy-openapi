@@ -1,0 +1,94 @@
+paths:
+  /connections/create-invitation:
+    post:
+      operationId: create_invitation
+  /connections:
+    get:
+      operationId: get_connections
+  /connections/create-static:
+    post:
+      operationId: create_static
+  /connections/receive-invitation:
+    post:
+      operationId: receive_invitation
+  /connections/{conn_id}:
+    get:
+      operationId: get_connection
+    delete:
+      operationId: delete_connection
+  /connections/{conn_id}/metadata:
+    get:
+      operationId: get_metadata
+    post:
+      operationId: set_metadata
+  /connections/{conn_id}/send-message:
+    post:
+      operationId: send_basicmessage
+  /credential-definitions:
+    post:
+      operationId: publish_cred_def
+  /issue-credential/send:
+    post:
+      operationId: issue_credential_automated
+  /ledger/taa:
+    get:
+      operationId: fetch_taa
+  /ledger/taa/accept:
+    post:
+      operationId: accept_taa
+  /present-proof/send-request:
+    post:
+      operationId: send_proof_request
+  /revocation/publish-revocations:
+    post:
+      operationId: publish_revocations
+  /revocation/revoke:
+    post:
+      operationId: revoke_credential
+  /schemas:
+    post:
+      operationId: publish_schema
+  /wallet/did/create:
+    post:
+      operationId: create_did
+  /wallet/did/public:
+    post:
+      operationId: set_public_did
+  /issue-credential-2.0/create:
+    post:
+      operationId: create_credential
+  /issue-credential-2.0/records:
+    get:
+      operationId: get_records
+  /issue-credential-2.0/records/{cred_ex_id}:
+    get:
+      operationId: get_record
+    delete:
+      operationId: delete_record
+  /issue-credential-2.0/records/{cred_ex_id}/issue:
+    post:
+      operationId: issue_credential
+  /issue-credential-2.0/records/{cred_ex_id}/problem-report:
+    post:
+      operationId: report_problem
+  /issue-credential-2.0/records/{cred_ex_id}/send-offer:
+    post:
+      operationId: send_offer
+  /issue-credential-2.0/records/{cred_ex_id}/send-request:
+    post:
+      operationId: send_request
+  /issue-credential-2.0/records/{cred_ex_id}/store:
+    post:
+      operationId: store_credential
+  /issue-credential-2.0/send:
+    post:
+      operationId: issue_credential_automated
+  /issue-credential-2.0/send-offer:
+    post:
+      operationId: send_offer_free
+  /issue-credential-2.0/send-request:
+    post:
+      operationId: send_request_free
+  /issue-credential-2.0/send-proposal:
+    post:
+      operationId: send_proposal

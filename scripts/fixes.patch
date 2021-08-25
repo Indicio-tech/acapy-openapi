@@ -1,0 +1,205 @@
+diff --git a/openapi.yml b/openapi.yml
+index fdfd850..6cf485b 100644
+--- a/openapi.yml
++++ b/openapi.yml
+@@ -690,7 +690,9 @@ paths:
+           content:
+             application/json:
+               schema:
+-                $ref: '#/components/schemas/TxnOrCredentialDefinitionSendResult'
++                oneOf:
++                  - $ref: '#/components/schemas/CredentialDefinitionSendResult'
++                  - $ref: '#/components/schemas/TxnOrCredentialDefinitionSendResult'
+       x-codegen-request-body-name: body
+       operationId: publish_cred_def
+   /credential-definitions/created:
+@@ -2355,6 +2357,7 @@ paths:
+         in: query
+         description: Role assigned in presentation exchange
+         schema:
++          title: present_proof_role_schema
+           type: string
+           enum:
+           - prover
+@@ -2363,6 +2366,7 @@ paths:
+         in: query
+         description: Presentation exchange state
+         schema:
++          title: present_proof_state_schema
+           type: string
+           enum:
+           - proposal-sent
+@@ -3036,7 +3040,9 @@ paths:
+           content:
+             application/json:
+               schema:
+-                $ref: '#/components/schemas/TxnOrPublishRevocationsResult'
++                oneOf:
++                  - $ref: '#/components/schemas/PublishRevocations'
++                  - $ref: '#/components/schemas/TxnOrPublishRevocationsResult'
+       x-codegen-request-body-name: body
+       operationId: publish_revocations
+   /revocation/registries/created:
+@@ -3144,7 +3150,9 @@ paths:
+           content:
+             application/json:
+               schema:
+-                $ref: '#/components/schemas/TxnOrRevRegResult'
++                oneOf:
++                  - $ref: '#/components/schemas/RevRegResult'
++                  - $ref: '#/components/schemas/TxnOrRevRegResult'
+   /revocation/registry/{rev_reg_id}/entry:
+     post:
+       tags:
+@@ -3315,7 +3323,9 @@ paths:
+           content:
+             application/json:
+               schema:
+-                $ref: '#/components/schemas/TxnOrSchemaSendResult'
++                oneOf:
++                  - $ref: '#/components/schemas/SchemaSendResult'
++                  - $ref: '#/components/schemas/TxnOrSchemaSendResult'
+       x-codegen-request-body-name: body
+       operationId: publish_schema
+   /schemas/created:
+@@ -4114,22 +4124,8 @@ components:
+           description: Connection protocol used
+           example: connections/1.0
+           enum:
+-          - c
+-          - o
+-          - n
+-          - e
+-          - t
+-          - i
+-          - s
+-          - /
+-          - '1'
+-          - .
+-          - '0'
+-          - d
+-          - x
+-          - h
+-          - a
+-          - g
++          - connections/1.0
++          - didexchange/1.0
+         created_at:
+           pattern: ^\d{4}-\d\d-\d\d[T ]\d\d:\d\d(?:\:(?:\d\d(?:\.\d{1,6})?))?(?:[+-]\d\d:?\d\d|Z|)$
+           type: string
+@@ -4555,7 +4551,9 @@ components:
+           - https://www.w3.org/2018/credentials/v1
+           - https://www.w3.org/2018/credentials/examples/v1
+           items:
+-            type: object
++            anyOf:
++              - type: object
++              - type: string
+         credentialSubject:
+           type: object
+           example: ''
+@@ -4574,7 +4572,9 @@ components:
+           description: The issuance date
+           example: 2010-01-01 19:23:24+00:00
+         issuer:
+-          type: object
++          oneOf:
++            - type: object
++            - type: string
+           description: The JSON-LD Verifiable Credential Issuer. Either string of
+             object with id field.
+           example: did:key:z6MkpTHR8VNsBxYAAWHut2Geadd9jSwuBV8xRoAnwWsdvktH
+@@ -4656,6 +4656,8 @@ components:
+           example: default
+     CredentialDefinitionSendResult:
+       type: object
++      required:
++        - credential_definition_id
+       properties:
+         credential_definition_id:
+           pattern: ^([123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{21,22}):3:CL:(([1-9][0-9]*)|([123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{21,22}:2:.+:[0-9.]+)):(.+)?$
+@@ -5040,7 +5042,14 @@ components:
+       type: object
+       properties:
+         const:
+-          type: object
++          anyOf:
++            - type: string
++            - type: number
++            - type: integer
++            - type: boolean
++            - type: array
++              items: {}
++            - type: object
+           description: Const
+         enum:
+           type: array
+@@ -6953,6 +6962,8 @@ components:
+           example: 0
+     RevRegResult:
+       type: object
++      required:
++        - result
+       properties:
+         result:
+           $ref: '#/components/schemas/IssuerRevRegRecord'
+@@ -7103,7 +7114,8 @@ components:
+           example: '1.0'
+     SchemaSendResult:
+       required:
+-      - schema_id
++        - schema_id
++        - schema
+       type: object
+       properties:
+         schema:
+@@ -7204,7 +7216,8 @@ components:
+         from_nested:
+           type: array
+           items:
+-            $ref: '#/components/schemas/SubmissionRequirements'
++            type: object
++            #$ref: '#/components/schemas/SubmissionRequirements'
+         max:
+           type: integer
+           description: Max Value
+@@ -7238,6 +7251,7 @@ components:
+           type: string
+     TAAAcceptance:
+       type: object
++      nullable: true
+       properties:
+         mechanism:
+           type: string
+@@ -7390,6 +7404,7 @@ components:
+           example: 2021-07-30 19:50:08+00:00
+     TxnOrCredentialDefinitionSendResult:
+       type: object
++      additionalProperties: false
+       properties:
+         sent:
+           $ref: '#/components/schemas/CredentialDefinitionSendResult'
+@@ -7400,6 +7415,7 @@ components:
+           - $ref: '#/components/schemas/TransactionRecord'
+     TxnOrPublishRevocationsResult:
+       type: object
++      additionalProperties: false
+       properties:
+         sent:
+           $ref: '#/components/schemas/PublishRevocations'
+@@ -7410,6 +7426,7 @@ components:
+           - $ref: '#/components/schemas/TransactionRecord'
+     TxnOrRevRegResult:
+       type: object
++      additionalProperties: false
+       properties:
+         sent:
+           $ref: '#/components/schemas/RevRegResult'
+@@ -7420,6 +7437,7 @@ components:
+           - $ref: '#/components/schemas/TransactionRecord'
+     TxnOrSchemaSendResult:
+       type: object
++      additionalProperties: false
+       properties:
+         sent:
+           type: object
