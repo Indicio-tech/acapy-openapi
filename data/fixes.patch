@@ -62,31 +62,6 @@ index fdfd850..6cf485b 100644
        x-codegen-request-body-name: body
        operationId: publish_schema
    /schemas/created:
-@@ -4114,22 +4124,8 @@ components:
-           description: Connection protocol used
-           example: connections/1.0
-           enum:
--          - c
--          - o
--          - n
--          - e
--          - t
--          - i
--          - s
--          - /
--          - '1'
--          - .
--          - '0'
--          - d
--          - x
--          - h
--          - a
--          - g
-+          - connections/1.0
-+          - didexchange/1.0
-         created_at:
-           pattern: ^\d{4}-\d\d-\d\d[T ]\d\d:\d\d(?:\:(?:\d\d(?:\.\d{1,6})?))?(?:[+-]\d\d:?\d\d|Z|)$
-           type: string
 @@ -4555,7 +4551,9 @@ components:
            - https://www.w3.org/2018/credentials/v1
            - https://www.w3.org/2018/credentials/examples/v1
@@ -172,7 +147,7 @@ index fdfd850..6cf485b 100644
          mechanism:
            type: string
 @@ -7390,6 +7404,7 @@ components:
-           example: 2021-07-30 19:50:08+00:00
+           example: 2021-12-31 23:59:59+00:00
      TxnOrCredentialDefinitionSendResult:
        type: object
 +      additionalProperties: false
