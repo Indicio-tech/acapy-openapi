@@ -5299,10 +5299,14 @@ components:
             type: object
             description: Enum
         exclusiveMaximum:
-          type: object
+          anyOf:
+            - type: string
+            - type: number
           description: ExclusiveMaximum
         exclusiveMinimum:
-          type: object
+          anyOf:
+            - type: string
+            - type: number
           description: ExclusiveMinimum
         format:
           type: string
@@ -5313,15 +5317,18 @@ components:
           format: int32
           example: 1234
         maximum:
-          type: object
-          description: Maximum
+          anyOf:
+            - type: string
+            - type: number
         minLength:
           type: integer
           description: Min Length
           format: int32
           example: 1234
         minimum:
-          type: object
+          anyOf:
+            - type: string
+            - type: number
           description: Minimum
         not:
           type: boolean
