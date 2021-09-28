@@ -8967,8 +8967,8 @@ components:
           description: 'Whether presentation is verified: ''true'' or ''false'''
           example: 'true'
           enum:
-          - 'true'
-          - 'false'
+          - 'True'
+          - 'False'
     V20PresExRecordByFormat:
       type: object
       properties:
