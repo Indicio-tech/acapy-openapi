@@ -4532,7 +4532,7 @@ components:
           description: Remote verification key
     ConnectionStaticResult:
       required:
-      - mv_verkey
+      - my_verkey
       - my_did
       - my_endpoint
       - record
@@ -4540,7 +4540,7 @@ components:
       - their_verkey
       type: object
       properties:
-        mv_verkey:
+        my_verkey:
           pattern: ^[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{43,44}$
           type: string
           description: My verification key
