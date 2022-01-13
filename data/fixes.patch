@@ -2,7 +2,7 @@ diff --git a/openapi.yml b/openapi.yml
 index fdfd850..6cf485b 100644
 --- a/openapi.yml
 +++ b/openapi.yml
-@@ -690,6 +690,8 @@ paths:
+@@ -699,6 +699,8 @@ paths:
            content:
              application/json:
                schema:
