@@ -12,7 +12,7 @@ CONTAINER_RUNTIME=${CONTAINER_RUNTIME:-docker}
 ##########################################################################################
 # Global Defaults and Constants
 ##########################################################################################
-ACA_PY_DOCKER_IMAGE_VERSION=${1:-"py36-1.16-1_0.7.0"}
+ACA_PY_DOCKER_IMAGE_VERSION=${1:-"py36-1.16-1_0.7.4"}
 ACA_PY_DOCKER_IMAGE_DEFAULT="bcgovimages/aries-cloudagent:${ACA_PY_DOCKER_IMAGE_VERSION}"
 
 ACA_PY_ADMIN_PORT="8305"
