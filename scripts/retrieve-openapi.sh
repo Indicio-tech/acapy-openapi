@@ -104,13 +104,13 @@ function runACAPy() {
 runACAPy "${ACA_PY_DOCKER_IMAGE_DEFAULT}" "${ACA_PY_DOCKER_PORTS}" "${ACA_PY_CMD_OPTIONS}" ACA_PY_CONTAINER_ID 
 # Make sure ACA-py container gets terminated when we do
 trap '$CONTAINER_RUNTIME kill ${ACA_PY_CONTAINER_ID}' EXIT
-waitActiveWebInterface "http://localhost:${ACA_PY_ADMIN_PORT}" 20
+waitActiveWebInterface "http://${DOCKER_CONTAINER_HOST:-localhost}:${ACA_PY_ADMIN_PORT}" 20
 returnValue=$?
 if [ $returnValue != 0 ]; then
   exit
 fi
 printMilestone "ACA-Py Admin interface active\n\t Docker Id '${ACA_PY_CONTAINER_ID}'"
 
-curl --output ./swagger.json http://localhost:${ACA_PY_ADMIN_PORT}/api/docs/swagger.json
+curl --output ./swagger.json http://${DOCKER_CONTAINER_HOST:-localhost}:${ACA_PY_ADMIN_PORT}/api/docs/swagger.json
 
 printMilestone "Sucessfully wrote ACA-Py open api file to ./swagger.json"
