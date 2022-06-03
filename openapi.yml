@@ -262,15 +262,15 @@ paths:
         schema:
           type: string
           enum:
-          - error
+          - response
+          - completed
           - start
           - abandoned
+          - error
+          - request
           - active
           - invitation
-          - response
           - init
-          - completed
-          - request
       - name: their_did
         in: query
         description: Their DID
@@ -300,7 +300,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ConnectionList'
-      operationId: get_connections
   /connections/create-invitation:
     post:
       tags:
@@ -341,7 +340,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/InvitationResult'
       x-codegen-request-body-name: body
-      operationId: create_invitation
   /connections/create-static:
     post:
       tags:
@@ -361,7 +359,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/ConnectionStaticResult'
       x-codegen-request-body-name: body
-      operationId: create_static
   /connections/receive-invitation:
     post:
       tags:
@@ -398,7 +395,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/ConnRecord'
       x-codegen-request-body-name: body
-      operationId: receive_invitation
   /connections/{conn_id}:
     get:
       tags:
@@ -418,7 +414,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ConnRecord'
-      operationId: get_connection
     delete:
       tags:
       - connection
@@ -437,7 +432,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ConnectionModuleResponse'
-      operationId: delete_connection
   /connections/{conn_id}/accept-invitation:
     post:
       tags:
@@ -567,7 +561,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ConnectionMetadata'
-      operationId: get_metadata
     post:
       tags:
       - connection
@@ -593,7 +586,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/ConnectionMetadata'
       x-codegen-request-body-name: body
-      operationId: set_metadata
   /connections/{conn_id}/send-message:
     post:
       tags:
@@ -620,7 +612,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/BasicMessageModuleResponse'
       x-codegen-request-body-name: body
-      operationId: send_basicmessage
   /connections/{conn_id}/send-ping:
     post:
       tags:
@@ -709,7 +700,6 @@ paths:
                   - $ref: '#/components/schemas/CredentialDefinitionSendResult'
                   - $ref: '#/components/schemas/TxnOrCredentialDefinitionSendResult'
       x-codegen-request-body-name: body
-      operationId: publish_cred_def
   /credential-definitions/created:
     get:
       tags:
@@ -1254,7 +1244,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/V20CredExRecord'
       x-codegen-request-body-name: body
-      operationId: create_credential
   /issue-credential-2.0/create-offer:
     post:
       tags:
@@ -1324,7 +1313,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/V20CredExRecordListResult'
-      operationId: get_records
   /issue-credential-2.0/records/{cred_ex_id}:
     get:
       tags:
@@ -1345,7 +1333,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/V20CredExRecordDetail'
-      operationId: get_record
     delete:
       tags:
       - issue-credential v2.0
@@ -1365,7 +1352,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/V20IssueCredentialModuleResponse'
-      operationId: delete_record
   /issue-credential-2.0/records/{cred_ex_id}/issue:
     post:
       tags:
@@ -1393,7 +1379,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/V20CredExRecordDetail'
       x-codegen-request-body-name: body
-      operationId: issue_credential
   /issue-credential-2.0/records/{cred_ex_id}/problem-report:
     post:
       tags:
@@ -1421,7 +1406,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/V20IssueCredentialModuleResponse'
       x-codegen-request-body-name: body
-      operationId: report_problem
   /issue-credential-2.0/records/{cred_ex_id}/send-offer:
     post:
       tags:
@@ -1449,7 +1433,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/V20CredExRecord'
       x-codegen-request-body-name: body
-      operationId: send_offer
   /issue-credential-2.0/records/{cred_ex_id}/send-request:
     post:
       tags:
@@ -1477,7 +1460,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/V20CredExRecord'
       x-codegen-request-body-name: body
-      operationId: send_request
   /issue-credential-2.0/records/{cred_ex_id}/store:
     post:
       tags:
@@ -1505,7 +1487,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/V20CredExRecordDetail'
       x-codegen-request-body-name: body
-      operationId: store_credential
   /issue-credential-2.0/send:
     post:
       tags:
@@ -1525,7 +1506,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/V20CredExRecord'
       x-codegen-request-body-name: body
-      operationId: issue_credential_automated
   /issue-credential-2.0/send-offer:
     post:
       tags:
@@ -1545,7 +1525,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/V20CredExRecord'
       x-codegen-request-body-name: body
-      operationId: send_offer_free
   /issue-credential-2.0/send-proposal:
     post:
       tags:
@@ -1565,7 +1544,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/V20CredExRecord'
       x-codegen-request-body-name: body
-      operationId: send_proposal
   /issue-credential-2.0/send-request:
     post:
       tags:
@@ -1586,7 +1564,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/V20CredExRecord'
       x-codegen-request-body-name: body
-      operationId: send_request_free
   /issue-credential/create:
     post:
       tags:
@@ -1861,7 +1838,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/V10CredentialExchange'
       x-codegen-request-body-name: body
-      operationId: issue_credential_automated
   /issue-credential/send-offer:
     post:
       tags:
@@ -2108,7 +2084,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TAAResult'
-      operationId: fetch_taa
   /ledger/taa/accept:
     post:
       tags:
@@ -2128,7 +2103,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/LedgerModulesResult'
       x-codegen-request-body-name: body
-      operationId: accept_taa
   /mediation/default-mediator:
     get:
       tags:
@@ -3227,7 +3201,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/V10PresentationExchange'
       x-codegen-request-body-name: body
-      operationId: send_proof_request
   /resolver/resolve/{did}:
     get:
       tags:
@@ -3358,7 +3331,6 @@ paths:
                   - $ref: '#/components/schemas/PublishRevocations'
                   - $ref: '#/components/schemas/TxnOrPublishRevocationsResult'
       x-codegen-request-body-name: body
-      operationId: publish_revocations
   /revocation/registries/created:
     get:
       tags:
@@ -3608,7 +3580,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/RevocationModuleResponse'
       x-codegen-request-body-name: body
-      operationId: revoke_credential
   /schemas:
     post:
       tags:
@@ -3641,7 +3612,6 @@ paths:
                   - $ref: '#/components/schemas/SchemaSendResult'
                   - $ref: '#/components/schemas/TxnOrSchemaSendResult'
       x-codegen-request-body-name: body
-      operationId: publish_schema
   /schemas/created:
     get:
       tags:
@@ -4080,7 +4050,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/DIDResult'
       x-codegen-request-body-name: body
-      operationId: create_did
   /wallet/did/local/rotate-keypair:
     patch:
       tags:
@@ -4142,7 +4111,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DIDResult'
-      operationId: set_public_did
   /wallet/get-did-endpoint:
     get:
       tags:
@@ -6650,7 +6618,9 @@ components:
             type: string
           - did:sov:WgWxqztrNooG92RXvxSTWv
           items:
-            type: object
+            oneOf:
+              - type: object
+              - type: string
             description: Either a DIDComm service object (as per RFC0067) or a DID
               string.
     InvitationRecord:

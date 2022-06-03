@@ -106,7 +106,17 @@ index fdfd850..6cf485b 100644
            description: Const
          enum:
            type: array
-@@ -6953,6 +6962,8 @@ components:
+@@ -6584,6 +6595,8 @@
+             type: string
+           - did:sov:WgWxqztrNooG92RXvxSTWv
+           items:
+-            type: object
++            oneOf:
++              - type: object
++              - type: string
+             description: Either a DIDComm service object (as per RFC0067) or a DID
+               string.
+@@ -6955,6 +6964,8 @@ components:
            example: 0
      RevRegResult:
        type: object
@@ -115,7 +125,7 @@ index fdfd850..6cf485b 100644
        properties:
          result:
            $ref: '#/components/schemas/IssuerRevRegRecord'
-@@ -7103,7 +7114,8 @@ components:
+@@ -7105,7 +7116,8 @@ components:
            example: '1.0'
      SchemaSendResult:
        required:
@@ -125,7 +135,7 @@ index fdfd850..6cf485b 100644
        type: object
        properties:
          schema:
-@@ -7204,7 +7216,8 @@ components:
+@@ -7206,7 +7218,8 @@ components:
          from_nested:
            type: array
            items:
@@ -135,7 +145,7 @@ index fdfd850..6cf485b 100644
          max:
            type: integer
            description: Max Value
-@@ -7238,6 +7251,7 @@ components:
+@@ -7240,6 +7253,7 @@ components:
            type: string
      TAAAcceptance:
        type: object
@@ -143,7 +153,7 @@ index fdfd850..6cf485b 100644
        properties:
          mechanism:
            type: string
-@@ -7390,6 +7404,7 @@ components:
+@@ -7392,6 +7406,7 @@ components:
            example: 2021-12-31 23:59:59+00:00
      TxnOrCredentialDefinitionSendResult:
        type: object
@@ -151,7 +161,7 @@ index fdfd850..6cf485b 100644
        properties:
          sent:
            $ref: '#/components/schemas/CredentialDefinitionSendResult'
-@@ -7400,6 +7415,7 @@ components:
+@@ -7402,6 +7417,7 @@ components:
            - $ref: '#/components/schemas/TransactionRecord'
      TxnOrPublishRevocationsResult:
        type: object
@@ -159,7 +169,7 @@ index fdfd850..6cf485b 100644
        properties:
          sent:
            $ref: '#/components/schemas/PublishRevocations'
-@@ -7410,6 +7426,7 @@ components:
+@@ -7412,6 +7428,7 @@ components:
            - $ref: '#/components/schemas/TransactionRecord'
      TxnOrRevRegResult:
        type: object
@@ -167,7 +177,7 @@ index fdfd850..6cf485b 100644
        properties:
          sent:
            $ref: '#/components/schemas/RevRegResult'
-@@ -7420,6 +7437,7 @@ components:
+@@ -7422,6 +7439,7 @@ components:
            - $ref: '#/components/schemas/TransactionRecord'
      TxnOrSchemaSendResult:
        type: object
