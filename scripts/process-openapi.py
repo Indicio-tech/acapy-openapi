@@ -1,105 +1,88 @@
-from functools import singledispatchmethod
+from abc import ABC, abstractmethod
 import re
-
-import deepmerge
-from inflection import camelize
+from typing import Any
 import yaml
 
 
-class OpenAPICleaner:
+class Visitor(ABC):
+    @abstractmethod
+    def visit(self, value: Any) -> Any:
+        """Visit the value."""
+
+
+class NullDescriptors(Visitor):
+    def visit(self, value):
+        if isinstance(value, dict):
+            if "description" in value and value["description"] is None:
+                value["description"] = ""
+            return value
+        return value
+
+class MissingExternalDocUrls(Visitor):
+    def visit(self, value):
+        if isinstance(value, dict):
+            if "externalDocs" in value and "url" not in value["externalDocs"]:
+                value["externalDocs"]["url"] = "http://example.com/replace/me"
+            return value
+        return value
+
+
+class FixRefs(Visitor):
+
     FIX_REF_RE = re.compile(r"#/definitions")
 
-    @singledispatchmethod
-    def no_null_descriptions(self, value):
+    def visit(self, value):
+        if isinstance(value, dict):
+            if "$ref" in value:
+                value["$ref"] = self.FIX_REF_RE.sub("#/components/schemas", value["$ref"])
+            return value
         return value
 
-    @no_null_descriptions.register
-    def _(self, value: dict):
-        for child in value.values():
-            self.no_null_descriptions(child)
 
-        if "description" in value and value["description"] is None:
-            value["description"] = ""
-
-    @no_null_descriptions.register
-    def _(self, value: list):
-        for item in value:
-            self.no_null_descriptions(item)
-
-    @singledispatchmethod
-    def no_missing_external_doc_urls(self, value):
+class FixContentTypes(Visitor):
+    def visit(self, value):
+        if isinstance(value, dict):
+            if "*/*" in value:
+                value["application/json"] = value["*/*"]
+                del value["*/*"]
+            return value
         return value
 
-    @no_missing_external_doc_urls.register
-    def _(self, value: dict):
-        for child in value.values():
-            self.no_missing_external_doc_urls(child)
 
-        if "externalDocs" in value and "url" not in value["externalDocs"]:
-            value["externalDocs"]["url"] = "http://example.com/replace/me"
+class OpenAPICleaner:
 
-    @no_missing_external_doc_urls.register
-    def _(self, value: list):
-        for item in value:
-            self.no_missing_external_doc_urls(item)
+    def __init__(self, *visitors: Visitor):
+        self.visitors = visitors
 
-    @singledispatchmethod
-    def fix_refs(self, value):
+    def clean(self, value: Any):
+        for visitor in self.visitors:
+            value = visitor.visit(value)
+        
+        # Recurse
+        if isinstance(value, dict):
+            for child in value.values():
+                self.clean(child)
+
+        if isinstance(value, list):
+            for item in value:
+                self.clean(item)
+
         return value
-
-    @fix_refs.register
-    def _(self, value: dict):
-        for child in value.values():
-            self.fix_refs(child)
-
-        if "$ref" in value:
-            value["$ref"] = self.FIX_REF_RE.sub("#/components/schemas", value["$ref"])
-
-    @fix_refs.register
-    def _(self, value: list):
-        for item in value:
-            self.fix_refs(item)
-
-    @singledispatchmethod
-    def fix_content_types(self, value):
-        return value
-
-    @fix_content_types.register
-    def _(self, value: dict):
-        for child in value.values():
-            self.fix_content_types(child)
-
-        if "*/*" in value:
-            value["application/json"] = value["*/*"]
-            del value["*/*"]
-
-    @fix_content_types.register
-    def _(self, value: list):
-        for item in value:
-            self.fix_content_types(item)
-
-    def clean(self, value):
-        self.no_null_descriptions(value)
-        self.no_missing_external_doc_urls(value)
-        self.fix_refs(value)
-        self.fix_content_types(value)
-
-
-def merge_operation_ids():
-    with open(
-        "/app/openapi.yml"
-    ) as openapi_file, open(
-        "/app/operation-id-map.yml"
-    ) as ops_file:
-        openapi = yaml.load(openapi_file, Loader=yaml.FullLoader)
-        ops = yaml.load(ops_file, Loader=yaml.FullLoader)
-
-    return deepmerge.always_merger.merge(openapi, ops)
 
 
 if __name__ == "__main__":
-    result = merge_operation_ids()
-    cleaner = OpenAPICleaner()
-    cleaner.clean(result)
+    with open(
+        "/app/openapi.yml"
+    ) as openapi_file:
+        openapi = yaml.load(openapi_file, Loader=yaml.FullLoader)
+
+    cleaner = OpenAPICleaner(
+        NullDescriptors(),
+        MissingExternalDocUrls(),
+        FixRefs(),
+        FixContentTypes()
+    )
+    openapi = cleaner.clean(openapi)
+
     with open("/app/openapi.yml", "w") as openapi_file:
-        yaml.dump(result, openapi_file, sort_keys=False)
+        yaml.dump(openapi, openapi_file, sort_keys=False)
