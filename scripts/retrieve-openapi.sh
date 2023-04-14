@@ -15,6 +15,7 @@ CONTAINER_RUNTIME=${CONTAINER_RUNTIME:-docker}
 ACA_PY_DOCKER_IMAGE_VERSION=${1:-"py36-1.16-1_0.7.4"}
 ACA_PY_DOCKER_IMAGE_DEFAULT="bcgovimages/aries-cloudagent:${ACA_PY_DOCKER_IMAGE_VERSION}"
 
+
 ACA_PY_ADMIN_PORT="8305"
 ACA_PY_INBOUND_PORT="8307"
 ACA_PY_DOCKER_PORTS="${ACA_PY_INBOUND_PORT}:${ACA_PY_INBOUND_PORT} ${ACA_PY_ADMIN_PORT}:${ACA_PY_ADMIN_PORT}"
@@ -104,7 +105,7 @@ function runACAPy() {
 runACAPy "${ACA_PY_DOCKER_IMAGE_DEFAULT}" "${ACA_PY_DOCKER_PORTS}" "${ACA_PY_CMD_OPTIONS}" ACA_PY_CONTAINER_ID 
 # Make sure ACA-py container gets terminated when we do
 trap '$CONTAINER_RUNTIME kill ${ACA_PY_CONTAINER_ID}' EXIT
-waitActiveWebInterface "http://${DOCKER_CONTAINER_HOST:-localhost}:${ACA_PY_ADMIN_PORT}" 20
+waitActiveWebInterface "http://${DOCKER_CONTAINER_HOST:-localhost}:${ACA_PY_ADMIN_PORT}" 60
 returnValue=$?
 if [ $returnValue != 0 ]; then
   exit
