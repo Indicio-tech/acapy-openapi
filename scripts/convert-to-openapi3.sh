@@ -5,7 +5,7 @@ CONTAINER_RUNTIME=${CONTAINER_RUNTIME:-docker}
 
 CONTAINER_NAME=openapi-converter
 
-${CONTAINER_RUNTIME} run --rm -d -p 8080:8080 --name ${CONTAINER_NAME} swaggerapi/swagger-converter:v1.0.2
+${CONTAINER_RUNTIME} run --rm -d -p 8080:8080 --platform linux/amd64 --name ${CONTAINER_NAME} swaggerapi/swagger-converter:v1.0.2 
 trap '${CONTAINER_RUNTIME} stop ${CONTAINER_NAME}' EXIT
 while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' ${DOCKER_CONTAINER_HOST:-localhost}:8080)" != "200" ]];do
     echo "Conveter not yet ready..."
